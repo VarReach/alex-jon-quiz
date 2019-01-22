@@ -40,7 +40,7 @@ const STORE = [
             'Andromeda'
         ],
         correctAnswerIndex: 1,
-        altImage: { 'https://static1.squarespace.com/static/51b3dc8ee4b051b96ceb10de/t/54613c94e4b0e58fabd9ab2f/1415658655207/battlestar-galactica-is-even-more-badass-with-top-gun-music?format=1500w', alt: 'A Human and Cylon ship flying next to each other in a battle' },
+        altImage: { src: 'https://static1.squarespace.com/static/51b3dc8ee4b051b96ceb10de/t/54613c94e4b0e58fabd9ab2f/1415658655207/battlestar-galactica-is-even-more-badass-with-top-gun-music?format=1500w', alt: 'A Human and Cylon ship flying next to each other in a battle' },
         trivia: "During the show's first season, it consistently remained Sci-Fi Channel's top-rated program, pulling in more than 3 million viewers. Its 10pm viewing even finished ahead of UPN's Star Trek: Enterprise (2001) which aired at 8pm on Fridays on a non-cable/satellite network.",
     },
     //Firefly
@@ -110,7 +110,7 @@ const STORE = [
             'Grimm'
         ],
         correctAnswerIndex: 1,
-        altImage: { src: 'https://m.media-amazon.com/images/M/MV5BMTIzODAwOTM2MF5BMl5BanBnXkFtZTYwMzM1OTk1', alt: 'Composer Mark Snow holding an award' }
+        altImage: { src: 'https://m.media-amazon.com/images/M/MV5BMTIzODAwOTM2MF5BMl5BanBnXkFtZTYwMzM1OTk1', alt: 'Composer Mark Snow holding an award' },
         trivia: "The famous echoing chord from the theme music was a fluke. Composer Mark Snow accidentally rested his elbow on his keyboard with the echo function on and he liked the resulting sound so much, he wrote the theme around it.",
     },
     //Babylon-5
