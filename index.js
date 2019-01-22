@@ -63,12 +63,16 @@ function generateAnswerView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
     const correctBool = isAnswerCorrect(questionData.correctAnswerIndex);
+    const chosenAnswer = STATE.answer;
+    console.log(chosenAnswer)
+    console.log(questionData)
+    console.log(questionData.correctAnswerIndex)
     console.log(correctBool);
     return `
         <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
         <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
         <h3 class='js-correct-asnwer'>The correct answer was...</h3>
-        <p>Answer goes here</p>
+        <p>${questionData.answers[questionData.correctAnswerIndex]}</p>
         <button id="js-next-question-btn">Next Question</button>
     `;
 }
@@ -101,11 +105,12 @@ function getCurrentQuestion() {
 
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
-    return inputValue === STATE.answer;
+  return inputValue === STATE.answer
 }
 
 function grabAnswer(form) {
-    const inputValue = $(form).find('input[type=radio]:checked').val();
+    let inputValue = $(form).find('input[type=radio]:checked').val();
+    inputValue = parseInt(inputValue);
     STATE.answer = inputValue;
 }
 
