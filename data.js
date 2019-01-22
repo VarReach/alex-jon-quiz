@@ -12,7 +12,7 @@ const STORE = [
             'Star Trek: The Next Generation'
         ],
         correctAnswerIndex: 3,
-        triviaImage: { src: 'https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2016/05/gettyimages-156913467_1-h_2016.jpg', alt: 'Kirk and Uhura about to kiss in greek period costumes.' },
+        altImage: { src: 'https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2016/05/gettyimages-156913467_1-h_2016.jpg', alt: 'Kirk and Uhura about to kiss in greek period costumes.' },
         trivia: "Notable for being the first scripted American television show to display a kiss between black and white races, William Shatner (Kirk) and Nichelle Nichols (Uhura), in Star Trek: Plato's Stepchildren (1968) broadcast November 22, 1968 to considerable controversy.",
     },
     //ST:TNG

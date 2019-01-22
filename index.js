@@ -4,8 +4,8 @@ const STATE = {
     currentQuestion: 0,
     score: 0,
     totalQuestions: 10,
+    answer: 0,
     questions: [],
-    answer: true,
 };
 
 // get random integer
@@ -47,7 +47,7 @@ function generateQuestionView() {
 
 // generate landing view
 function generateLandingView() {
-  return `
+    return `
     <section class="hidden">
       <h2>Think you know Sci-Fi television?</h2>
       <p>Find out with our 10 question quiz!</p>
@@ -60,25 +60,22 @@ function generateLandingView() {
 
 // generate answers view
 function generateAnswerView() {
-  return `
-  <section class="hidden">
-      <div>
-        <img>
-        <img>
-        <img>
-        <img>
-      </div>
-      <h2>You were right!</h2>
-      <h3 class='js-correct-asnwer'>The correct answer was...</h3>
-      <p>Answer goes here</p>
-      <button id="js-next-question-btn">Next Question</button>
-    </section>
-  `;
+    const currentQuestion = STATE.currentQuestion;
+    const questionData = STATE.questions[currentQuestion];
+    const correctBool = isAnswerCorrect(questionData.correctAnswerIndex);
+    console.log(correctBool);
+    return `
+        <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
+        <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
+        <h3 class='js-correct-asnwer'>The correct answer was...</h3>
+        <p>Answer goes here</p>
+        <button id="js-next-question-btn">Next Question</button>
+    `;
 }
 
 // generate final results view
 function generateFinalResultsView() {
-  return `
+    return `
   <section class="hidden">
     <h2>Congratulations</h2>
     <img>
@@ -91,9 +88,9 @@ function generateFinalResultsView() {
 
 // get question img functions
 function getCurrentQuestion() {
-  let currentQuestion = getRandomInt(STORE.length);
-  console.log('getCurrentQuestion function called');
-  return currentQuestion;
+    let currentQuestion = getRandomInt(STORE.length);
+    console.log('getCurrentQuestion function called');
+    return currentQuestion;
 }
 
 // get question answer functions
@@ -104,22 +101,28 @@ function getCurrentQuestion() {
 
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
-  inputValue === STATE.answer;
+    return inputValue === STATE.answer;
 }
 
+function grabAnswer(form) {
+    const inputValue = $(form).find('input[type=radio]:checked').val();
+    STATE.answer = inputValue;
+}
+
+function renderAnswerView() {
+    const answerScreen = generateAnswerView();
+    console.log(answerScreen);
+    $('.container').html(answerScreen);
+}
 
 // handle submit button
 function handleSubmitButton() {
-  $('.container').on('submit', '.js-question-form', (event) => {
-    event.preventDefault();
-    const correctAnswer = STATE.questions[STATE.currentQuestion].correctAnswerIndex;
-    let inputValue = $('form input[type=radio]:checked').val();
-    if (correctAnswer === inputValue) {
-      STATE.score++;
-      let answer = isAnswerCorrect(inputValue)
-      generateAnswerView();
-    }
-  });
+    $('.container').on('submit', '.js-question-form', function(event) {
+        event.preventDefault();
+        grabAnswer(this);
+        renderAnswerView();
+        renderUpdatedScore();
+    });
 }
 
 // handle next question button
@@ -144,10 +147,6 @@ function renderUpdatedScore() {
     $('.score-tracker').text(score);
 }
 
-function loadNextQuestion() {
-
-}
-
 function randomizeQuestionOrder() {
     const randoOrderArr = shuffleArray(STORE);
     const totalQuestions = STATE.totalQuestions;
@@ -167,12 +166,12 @@ function handleStartQuizButton() {
 
 //Start Screen
 
-    //Start Button -> Transitions us to the Quiz Screen
+//Start Button -> Transitions us to the Quiz Screen
 
 
 function main() {
-  handleStartQuizButton();
-  handleSubmitButton();
+    handleStartQuizButton();
+    handleSubmitButton();
 }
 
 $(main);
