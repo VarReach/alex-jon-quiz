@@ -1,34 +1,36 @@
 "use strict"
 
 const STATE = {
-    questionDataIndex: 0,
     currentQuestion: 0,
     score: 0,
     totalQuestions: 10,
-}
+    questions: [],
+};
 
 // get random integer
 function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
+    return Math.floor(Math.random() * Math.floor(max));
 }
 
-/* function shuffleArray(arr) {
-  let i = 0;
-  let j = 0;
-  let temp = null
-
-  for (i = arr.length - 1; i > 0; i -= 1) {
-    j = Math.floor(Math.random() * (i + 1))
-    temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-} */
+function shuffleArray(arr) {
+    let i = 0;
+    let j = 0;
+    let temp = null;
+    for (i = arr.length - 1; i > 0; i -= 1) {
+        j = Math.floor(Math.random() * (i + 1));
+        temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+}
 
 
 // generate question views
 function generateQuestionView() {
-    const questionData = STORE[STATE.questionDataIndex];
+    const currentQuestion = STATE.currentQuestion;
+    const questionData = STATE.questions[currentQuestion];
+    console.log(questionData);
     return `
         <h2>Some text</h2>
         <img src=${questionData.image.src} alt=${questionData.image.alt}>
@@ -109,10 +111,8 @@ function getCurrentQuestion() {
 
 // handle restart button
 
-function grabRandomQuestion() {
-    const index = 0;//getRandomInt(STORE.length);
+function loadNewQuestion() { 
     STATE.currentQuestion++;
-    STATE.questionDataIndex = index;
 }
 
 function renderQuestion() {
@@ -121,25 +121,30 @@ function renderQuestion() {
 }
 
 function renderUpdatedScore() {
-    $('')
+    const currentQNum = STATE.currentQuestion;
+    const totalQuestions = STATE.totalQuestions;
+    const score = STATE.score;
+    $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
+    $('.score-tracker').text(score);
 }
 
 function loadNextQuestion() {
-    grabRandomQuestion();
-    renderQuestion();
-    renderUpdatedScore();
+
+}
+
+function randomizeQuestionOrder() {
+    const randoOrderArr = shuffleArray(STORE);
+    const totalQuestions = STATE.totalQuestions;
+    const actualQuestions = randoOrderArr.slice(0, totalQuestions);
+    STATE.questions = actualQuestions;
 }
 
 
 function handleStartQuizButton() {
     $('#js-start-btn').click(() => {
-    //Grab a question
-        //grab one of the questions saved in the STORE
-        //make sure it's unique
-    //Render said question to the screen
-        //change the html in the container to our form
-        //Show the current question and the score in the header
-        loadNextQuestion();
+        randomizeQuestionOrder();
+        renderQuestion();
+        renderUpdatedScore();
     });
 }
 
