@@ -115,7 +115,7 @@ const STORE = [
     },
     //Babylon-5
     {
-        image: 'https://www.syfy.com/sites/syfy/files/styles/1200x680/public/2018/05/mv5bzjy0nza4zjitmzzkzi00mte5lthjmdktm2i0mzy2otrkndmyxkeyxkfqcgdeqxvyotu1mzy0nw._v1_.jpg',
+        image: 'https://www.syfy.com/sites/syfy/files/styles/1200x680/public/2018/05/mv5bzjy0nza4zjitmzzkzi00mte5lthjmdktm2i0mzy2otrkndmyxkeyxkfqcgdeqxvyotu1mzy0nw._v1_.jpg', alt="Londo Mollari and G'kar standing together",
         answers: [
             'Terra Nova',
             'Battlestar Galactica 1978',
@@ -124,7 +124,7 @@ const STORE = [
             'V'
         ],
         correctAnswerIndex: 2,
-        altImage: 'http://rpggamer.org/uploaded_images/Babylon_5_9.jpg',
+        altImage: 'http://rpggamer.org/uploaded_images/Babylon_5_9.jpg', alt='The babylon 5 station in orbit',
         trivia: "The Babylon 5 station is an \"O'Neill class space station\". Gerard K. O'Neill was a physicist and space visionary who suggested the use of large rotating cylindrical habitats for future space stations.",
     },
     //Doctor Who
@@ -171,7 +171,7 @@ const STORE = [
     },
     //Stranger Things
     {
-        image: 'https://s.yimg.com/ny/api/res/1.2/EN0qnpopUs0eqMwKyuwBUw--~A/YXBwaWQ9aGlnaGxhbmRlcjtzbT0xO3c9ODUwO2g9NTAw/http://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/e31aabf782465ce09559623b10a886b9',
+        image: 'https://s.yimg.com/ny/api/res/1.2/EN0qnpopUs0eqMwKyuwBUw--~A/YXBwaWQ9aGlnaGxhbmRlcjtzbT0xO3c9ODUwO2g9NTAw/http://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/e31aabf782465ce09559623b10a886b9', alt="Dustin Henderson wearing swim goggles with a bandana around his mounth",
         answers: [
             'Fringe',
             'Under the Dome',
@@ -180,12 +180,12 @@ const STORE = [
             'Stranger Things'
         ],
         correctAnswerIndex: 4,
-        altImage: 'https://www.telegraph.co.uk/content/dam/on-demand/2016/08/01/composite-stranger-things-dress-xxlarge_trans++8EuVKQIuseo94-dKmHKl1XjjZp2Y6K8nbt-Aru5IwLA.jpg',
+        altImage: 'https://www.telegraph.co.uk/content/dam/on-demand/2016/08/01/composite-stranger-things-dress-xxlarge_trans++8EuVKQIuseo94-dKmHKl1XjjZp2Y6K8nbt-Aru5IwLA.jpg', alt="Both eleven and ET in a dress",
         trivia: "Eleven's (Millie Bobby Brown) outfit of the pink dress & blonde wig are similar and possibly a nod to E.T.'s disguise in the movie E.T. The Extra-Terrestrial (1982).",
     },
     //Star Trek: Deep Space Nine
     {
-        image: 'http://media.hollywood.com/images/638x425/1772457.jpg',
+        image: 'http://media.hollywood.com/images/638x425/1772457.jpg', alt="Odo and Benjamin Sisko standing on the bridge",
         answers: [
             'Star Trek: Voyager',
             'Andromeda',
@@ -194,12 +194,12 @@ const STORE = [
             'Star Trek: Discovery'
         ],
         correctAnswerIndex: 2,
-        altImage: 'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.psRek5piz3jp3PWJu7havQHaFp%26pid%3D15.1&f=1',
+        altImage: 'https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.psRek5piz3jp3PWJu7havQHaFp%26pid%3D15.1&f=1', alt="GUl Dukat smiling",
         trivia: "The character of Garak, a former spy who works as a tailor on the station, was inspired by certain John le Carré's spy novels, particularly \"Tinker, Tailor, Soldier, Spy\".",
     },
     //Westworld
     {
-        image: 'https://cdn.vox-cdn.com/thumbor/OB6VHGhM1BMVQq0S3v_yASXV6ig=/0x0:5500x3667/1200x800/filters:focal(2439x322:3319x1202)/cdn.vox-cdn.com/uploads/chorus_image/image/59486611/fb63b49b84dec6ffedc59e9e54f4a855c339fb7e1e5450fd8c64cb11c7af3e01.0.jpg',
+        image: 'https://cdn.vox-cdn.com/thumbor/OB6VHGhM1BMVQq0S3v_yASXV6ig=/0x0:5500x3667/1200x800/filters:focal(2439x322:3319x1202)/cdn.vox-cdn.com/uploads/chorus_image/image/59486611/fb63b49b84dec6ffedc59e9e54f4a855c339fb7e1e5450fd8c64cb11c7af3e01.0.jpg', alt='Bernard Lowe standing incredulously',
         answers: [
             'Humans',
             'Counterpart',
@@ -208,7 +208,7 @@ const STORE = [
             'Defiance'
         ],
         correctAnswerIndex: 2,
-        altImage: 'https://townsquare.media/site/442/files/2016/11/westworld_town.jpg?w=960&h=402&q=75',
+        altImage: 'https://townsquare.media/site/442/files/2016/11/westworld_town.jpg?w=960&h=402&q=75', alt="Yul Brynner standing in a classic gunslinger pose from Westworld(1973)",
         trivia: "When you see the original gunslinger in the basement, the background music and noise is from Westworld (1973).",
     },
 ];
