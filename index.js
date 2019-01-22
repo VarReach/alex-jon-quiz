@@ -5,6 +5,7 @@ const STATE = {
     score: 0,
     totalQuestions: 10,
     questions: [],
+    answer: true,
 };
 
 // get random integer
@@ -30,7 +31,6 @@ function shuffleArray(arr) {
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
-    console.log(questionData);
     return `
         <h2>Some text</h2>
         <img src=${questionData.image.src} alt=${questionData.image.alt}>
@@ -40,7 +40,7 @@ function generateQuestionView() {
             <label class="answer"><input type='radio' name='radio-answer' value='2'><span>${questionData.answers[2]}</span></label>
             <label class="answer"><input type='radio' name='radio-answer' value='3'><span>${questionData.answers[3]}</span></label>
             <label class="answer"><input type='radio' name='radio-answer' value='4'><span>${questionData.answers[4]}</span></label>
-            <button id="js-sumbit">Let's Go!</button>
+            <button id="js-sumbit" type="submit">Submit</button>
         </form>
      `;
 }
@@ -55,6 +55,8 @@ function generateLandingView() {
     </section>
   `;
 }
+
+
 
 // generate answers view
 function generateAnswerView() {
@@ -97,14 +99,28 @@ function getCurrentQuestion() {
 // get question answer functions
 
 
-// keep track of score
-
-
 // handle let's go button
 
 
-// handle submit button
+// decide if answer is correct
+function isAnswerCorrect(inputValue) {
+  inputValue === STATE.answer;
+}
 
+
+// handle submit button
+function handleSubmitButton() {
+  $('.container').on('submit', '.js-question-form', (event) => {
+    event.preventDefault();
+    const correctAnswer = STATE.questions[STATE.currentQuestion].correctAnswerIndex;
+    let inputValue = $('form input[type=radio]:checked').val();
+    if (correctAnswer === inputValue) {
+      STATE.score++;
+      let answer = isAnswerCorrect(inputValue)
+      generateAnswerView();
+    }
+  });
+}
 
 // handle next question button
 
@@ -156,6 +172,7 @@ function handleStartQuizButton() {
 
 function main() {
   handleStartQuizButton();
+  handleSubmitButton();
 }
 
 $(main);
