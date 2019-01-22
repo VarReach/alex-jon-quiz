@@ -1,0 +1,32 @@
+.row {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.row::after {
+    clear: both;
+    display: table;
+    content: '';
+}
+
+[class*="col-"] {
+    float: left;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* mobile default */
+
+.col-1, .col-2 {
+    width: 100%;
+}
+
+@media only screen and (min-width: 900px) {
+    .col-1 {
+        width: 100%;
+    }
+
+    .col-2 {
+        width: 50%;
+    }
+}

@@ -3,7 +3,7 @@
 const STORE = [
     //ST:TOS
     {
-        image: 'https://theredlist.com/media/database/films/tv-series/fantasy-and-sci-fi/1960/star-trek-original/015-star-trek-theredlist.jpg',
+        image: { src: 'https://theredlist.com/media/database/films/tv-series/fantasy-and-sci-fi/1960/star-trek-original/015-star-trek-theredlist.jpg', alt: 'image alt' },
         answers: [
             'Star Trek: Voyager',
             'Star Trek: Enterprise',
@@ -12,7 +12,7 @@ const STORE = [
             'Star Trek: The Next Generation'
         ],
         correctAnswerIndex: 3,
-        altImage: 'https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2016/05/gettyimages-156913467_1-h_2016.jpg',
+        triviaImage: { src: 'https://cdn1.thr.com/sites/default/files/imagecache/landscape_928x523/2016/05/gettyimages-156913467_1-h_2016.jpg', alt: 'trivia image' },
         trivia: "Notable for being the first scripted American television show to display a kiss between black and white races, William Shatner (Kirk) and Nichelle Nichols (Uhura), in Star Trek: Plato's Stepchildren (1968) broadcast November 22, 1968 to considerable controversy.",
     },
     //ST:TNG
