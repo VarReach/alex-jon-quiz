@@ -5,23 +5,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Page Title</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet/font">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700" rel="stylesheet"> 
   <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
   
 </head>
 <body>
-  <header>
-    <h1>Quiz Title</h1>
-    <div class="quiz-tracker">
-      <span>Questions:</span><span class="q-num-tracker"></span>
-      <span>Score:</span><span class="score-tracker"></span>
-    </div>
+  <header role="banner">
+    <img src="Images/Logo.png" alt="Logo, planet with moon and rings">
   </header>
-  <div class="row container">
-    <h2>Think you know Sci-Fi television?</h2>
-    <p>Find out with our 10 question quiz!</p>
-    <button id="js-start-btn">Let's Go!</button>
+  <div class="flex-container container">
+    <h1 class="welcome-title">Think you know about Sci-Fi television?</h1>
+    <p class="welcome-subtitle">Find out with our 10 question quiz!</p>
+    <div class="button-holder">
+      <button id="js-start-btn">Let's Go!</button>
+    </div>
   </div>
+  <img class="background-image-details stars" src="Images/Stars.png" alt="A collection of minimalist stars placed on the background">
+  <img class="background-image-details clouds hidden" src="Images/Clouds.png" alt="Minimalist clouds aligned on the bottom of the screen in the background">
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
   <script src="data.js"></script>

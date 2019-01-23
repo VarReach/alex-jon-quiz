@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 
 const STATE = {
     currentQuestion: 0,
@@ -22,21 +22,35 @@ function shuffleArray(arr) {
     return arr;
 }
 
-
 // generate question views
+function generateQuestionString(arr) {
+    let fullString = '';
+    for (let i = 0; i < arr.length; i++) {
+        fullString += `
+            <div class="input-group">
+                <label class="answer"><input type='radio' name='radio-answer' value='${i}' required><span>${arr[i]}</span></label>
+            </div>
+        `;
+    }
+    return fullString;
+}
+
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
+    const answersStrings = generateQuestionString(questionData.answers);
     return `
-        <h2>Some text</h2>
-        <img src=${questionData.image.src} alt=${questionData.image.alt}>
+        <h2>Identify the TV series associated with the image below:</h2>
+        <div class="question-image-holder">
+            <img src=${questionData.image.src} alt=${questionData.image.alt}>
+        </div>
         <form class='js-question-form'>
-            <label class="answer"><input type='radio' name='radio-answer' value='0'><span>${questionData.answers[0]}</span></label>
-            <label class="answer"><input type='radio' name='radio-answer' value='1'><span>${questionData.answers[1]}</span></label>
-            <label class="answer"><input type='radio' name='radio-answer' value='2'><span>${questionData.answers[2]}</span></label>
-            <label class="answer"><input type='radio' name='radio-answer' value='3'><span>${questionData.answers[3]}</span></label>
-            <label class="answer"><input type='radio' name='radio-answer' value='4'><span>${questionData.answers[4]}</span></label>
-            <button id="js-sumbit" type="submit">Submit</button>
+            <div>
+                ${answersStrings}
+            </div>
+            <div class="button-holder">
+                <button id="js-sumbit" type="submit">Submit</button>
+            </div>
         </form>
      `;
 }
@@ -147,7 +161,6 @@ function handleSubmitButton() {
 // handle next question button
 function handleNextQuestionButton() {
     $('.container').on('click', '#js-next-question-btn', () => {
-        console.log(STATE.totalQuestions, STATE.currentQuestion);
         renderUpdatedScore();
         if (STATE.totalQuestions - 1 > STATE.currentQuestion) {
             loadNewQuestion()
