@@ -8,11 +8,7 @@ const STATE = {
     questions: [],
 };
 
-// get random integer
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
+// generate random questions order
 function shuffleArray(arr) {
     let i = 0;
     let j = 0;
@@ -47,19 +43,6 @@ function generateQuestionView() {
      `;
 }
 
-// generate landing view
-function generateLandingView() {
-    return `
-    <section class="hidden">
-      <h2>Think you know Sci-Fi television?</h2>
-      <p>Find out with our 10 question quiz!</p>
-      <button id="js-start-btn">Let's Go!</button>
-    </section>
-  `;
-}
-
-
-
 // generate answers view
 function generateAnswerView() {
     const currentQuestion = STATE.currentQuestion;
@@ -89,6 +72,57 @@ function generateFinalResultsView() {
   `;
 }
 
+// decide if answer is correct
+function isAnswerCorrect(inputValue) {
+  return inputValue === STATE.answer
+}
+
+// get input value from user
+function grabAnswer(form) {
+    let inputValue = $(form).find('input[type=radio]:checked').val();
+    inputValue = parseInt(inputValue);
+    STATE.answer = inputValue;
+}
+
+// keep track of current question
+function loadNewQuestion() { 
+    STATE.currentQuestion++;
+}
+
+// check if user answer is the current correct answer
+function userScore() {
+    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
+}
+
+// render and insert answer screen
+function renderAnswerView() {
+    const answerScreen = generateAnswerView();
+    console.log(answerScreen);
+    $('.container').html(answerScreen);
+}
+
+// render and insert question screen
+function renderQuestion() {
+    loadNewQuestion();
+    const questionScreen = generateQuestionView();
+    $('.container').html(questionScreen);
+}
+
+// render and insert results screen
+function renderResultsView() {
+    const resultsScreen = generateFinalResultsView();
+    $('.container').html(resultsScreen);
+}
+
+// update score and total question count in header
+function renderUpdatedScore() {
+    const currentQNum = STATE.currentQuestion;
+    const totalQuestions = STATE.totalQuestions;
+    let score = STATE.score;
+    $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
+    $('.score-tracker').text(score);
+}
+
 // get question img functions
 function getCurrentQuestion() {
     let currentQuestion = getRandomInt(STORE.length);
@@ -96,6 +130,38 @@ function getCurrentQuestion() {
     return currentQuestion;
 }
 
+// get random number array that is the total amount of questions desired
+function randomizeQuestionOrder() {
+    const randoOrderArr = shuffleArray(STORE);
+    const totalQuestions = STATE.totalQuestions;
+    const actualQuestions = randoOrderArr.slice(0, totalQuestions);
+    STATE.questions = actualQuestions;
+}
+
+// handle submit button
+function handleSubmitButton() {
+    $('.container').on('submit', '.js-question-form', function (event) {
+        event.preventDefault();
+        grabAnswer(this);
+        renderAnswerView();
+        userScore();
+        renderUpdatedScore();
+    });
+}
+
+// handle next question button
+function handleNextQuestionButton() {
+    $('.container').on('click', '#js-next-question-btn', () => {
+        if (STATE.questions.length - 1 !== STATE.currentQuestion) {
+            renderQuestion();
+            renderUpdatedScore();
+        } else {
+            renderUpdatedScore();
+            renderResultsView();
+        }
+
+    });
+}
 
 // handle play again button
 function handlePlayAgainButton() {
@@ -108,86 +174,7 @@ function handlePlayAgainButton() {
     });
 }
 
-// decide if answer is correct
-function isAnswerCorrect(inputValue) {
-  return inputValue === STATE.answer
-}
-
-function grabAnswer(form) {
-    let inputValue = $(form).find('input[type=radio]:checked').val();
-    inputValue = parseInt(inputValue);
-    STATE.answer = inputValue;
-}
-
-function renderAnswerView() {
-    const answerScreen = generateAnswerView();
-    console.log(answerScreen);
-    $('.container').html(answerScreen);
-}
-
-
-// handle submit button
-function handleSubmitButton() {
-    $('.container').on('submit', '.js-question-form', function(event) {
-        event.preventDefault();
-        grabAnswer(this);
-        renderAnswerView();
-        userScore();
-        renderUpdatedScore();
-    });
-}
-
-// handle next question button
-function handleNextQuestionButton() {
-  $('.container').on('click', '#js-next-question-btn', () => {
-    if (STATE.questions.length-1 !== STATE.currentQuestion) {
-        renderQuestion();
-        renderUpdatedScore();
-    } else {
-        renderUpdatedScore();
-        renderResultsView();
-    }
-    
-  });
-}
-
-// handle restart button
-
-function loadNewQuestion() { 
-    STATE.currentQuestion++;
-}
-
-function renderQuestion() {
-    loadNewQuestion();
-    const questionScreen = generateQuestionView();
-    $('.container').html(questionScreen);
-}
-
-function userScore() {
-    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
-}
-
-function renderResultsView() {
-    const resultsScreen = generateFinalResultsView();
-    $('.container').html(resultsScreen);
-}
-
-function renderUpdatedScore() {
-    const currentQNum = STATE.currentQuestion;
-    const totalQuestions = STATE.totalQuestions;
-    let score = STATE.score;
-    $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
-    $('.score-tracker').text(score);
-}
-
-function randomizeQuestionOrder() {
-    const randoOrderArr = shuffleArray(STORE);
-    const totalQuestions = STATE.totalQuestions;
-    const actualQuestions = randoOrderArr.slice(0, totalQuestions);
-    STATE.questions = actualQuestions;
-}
-
-
+// handles start quiz button on landing page
 function handleStartQuizButton() {
     $('#js-start-btn').click(() => {
         randomizeQuestionOrder();
