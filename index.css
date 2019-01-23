@@ -54,9 +54,18 @@ header {
   transform: translate(-50%, -50%);
 }
 
+.clouds, .mountains {
+  min-width: 100%;
+}
+
 .clouds {
   left: 0;
   bottom: -200px;
+}
+
+.mountains {
+  left: 0;
+  bottom: -500px;
 }
 
 .hidden {
@@ -108,7 +117,7 @@ button:active {
 
 /* welcome page */
 
-h1.welcome-title {
+.welcome-title {
   display: inline-block;
   position: relative;
   max-width: 1400px;
@@ -117,17 +126,42 @@ h1.welcome-title {
   color: #12c8f6;
 }
 
-p.welcome-subtitle {
+.welcome-subtitle, .trivia-subtitle {
   color: white;
   font-family: 'courier new';
+}
+
+.welcome-subtitle {
   margin-top: 9%;
 }
 
-h2 {
+.trivia-subtitle {
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.trivia-text {
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  max-width: 40%;
+  margin: 0 auto;
+}
+
+h2, h3 {
   position: relative;
   bottom: 5px;
-  font-size: 32pt;
   color: #12c8f6;
+  margin-bottom: 50px;
+}
+
+h2 {
+  font-size: 32pt;
+}
+
+h3 {
+  font-size: 40pt;
 }
 
 /* question page */
@@ -223,6 +257,7 @@ form.js-question-form div.input-group {
 
   h2 {
     font-size: 20pt;
+    margin-bottom: 10px;
   }
 
   .question-image-holder {
@@ -253,6 +288,17 @@ form.js-question-form div.input-group {
   .clouds {
     left: 0;
     bottom: 0;
+  }
+
+  .trivia-text {
+    max-width: 90%;
+  }
+
+  .score-holder {
+    position: relative;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
   }
 }
 

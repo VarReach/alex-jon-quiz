@@ -3,7 +3,7 @@
 const STATE = {
     currentQuestion: 0,
     score: 0,
-    totalQuestions: 10,
+    totalQuestions: 1,
     answer: 0,
     questions: [],
 };
@@ -26,7 +26,6 @@ function shuffleArray(arr) {
 function generateQuestionString(arr) {
     let fullString = '';
     arr = shuffleArray(arr);
-    console.log(arr);
     for (let i = 0; i < arr.length; i++) {
         fullString += `
             <div class="input-group">
@@ -64,12 +63,15 @@ function generateAnswerView() {
     const questionData = STATE.questions[currentQuestion];
     const correctBool = isAnswerCorrect(questionData.correctAnswer);
     return `
-        <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
-        <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
-        <h3 class='js-correct-asnwer'>The correct answer was...</h3>
-        <p>${questionData.answers[questionData.correctAnswerIndex]}</p>
-        <p>${questionData.trivia}</p>
-        <button id="js-next-question-btn">Next Question</button>
+        <h3>${correctBool ? 'You were right!' : 'Wrong!'}</h3>
+        <p class="trivia-subtitle">${correctBool ? 'Here, have some trivia:' : 'The correct answer was \''+questionData.correctAnswer+'\'. Have some trivia anyway:'}</p>
+        <div class="question-image-holder">
+            <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
+        </div>
+        <p class="trivia-subtitle trivia-text">${questionData.trivia}</p>
+        <div class="button-holder">
+            <button id="js-next-question-btn">Next Question</button>
+        </div>
     `;
 }
 
@@ -88,7 +90,6 @@ function generateFinalResultsView() {
 
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
-    console.log(inputValue, STATE.answer);
   return inputValue === STATE.answer;
 }
 
@@ -105,7 +106,8 @@ function loadNewQuestion() {
 
 // check if user answer is the current correct answer
 function userScore() {
-    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswer) ? STATE.score++ : STATE.score;
+    const correct = isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswer) 
+    correct ? STATE.score++ : STATE.score;
 }
 
 // render and insert answer screen
@@ -149,13 +151,6 @@ function renderUpdatedQuestionNum() {
     $('.q-num-tracker').text(`Question: ${currentQNum+'/'+totalQuestions}`);
 }
 
-/* // get question img functions
-function getCurrentQuestion() {
-    let currentQuestion = getRandomInt(STORE.length);
-    console.log('getCurrentQuestion function called');
-    return currentQuestion;
-} */
-
 // get random number array that is the total amount of questions desired
 function randomizeQuestionOrder() {
     const randoOrderArr = shuffleArray(STORE);
@@ -174,17 +169,22 @@ function handleSubmitButton() {
             fadeInContainer();
         });
         userScore();
-        renderUpdatedQuizTracker();
+        animateScore(() => { renderUpdatedScore(); });
     });
 }
 
 // handle next question button
 function handleNextQuestionButton() {
     $('.container').on('click', '#js-next-question-btn', () => {
-        renderUpdatedQuizTracker();
+        console.log(STATE.totalQuestions, STATE.currentQuestion);
         if (STATE.totalQuestions - 1 > STATE.currentQuestion) {
-            loadNewQuestion()
-            renderQuestion();
+            loadNewQuestion();
+
+            animateQuestionNum(() => { renderUpdatedQuestionNum(); });
+            transitionToScreen(() => {
+                renderQuestion();
+                fadeInContainer();
+            });
         } else {
             renderResultsView();
         }
@@ -240,6 +240,25 @@ function moveStarsUp() {
     $('.background-image-details.stars').animate({
         top: '-=400px',
     }, '2000');
+}
+
+function animateScore(fn) {
+    $('.score-tracker').slideUp('500', () => {
+        $('.score-tracker').promise().done(() => {
+            fn();
+            $('.score-tracker').slideDown('500');
+        });
+    });
+}
+
+
+function animateQuestionNum(fn) {
+    $('.q-num-tracker').slideUp('500', () => {
+        $('.q-num-tracker').promise().done(() => {
+            fn();
+            $('.q-num-tracker').slideDown('500');
+        });
+    });
 }
 
 function main() {
