@@ -25,10 +25,12 @@ function shuffleArray(arr) {
 // generate question views
 function generateQuestionString(arr) {
     let fullString = '';
+    arr = shuffleArray(arr);
+    console.log(arr);
     for (let i = 0; i < arr.length; i++) {
         fullString += `
             <div class="input-group">
-                <input type='radio' id="radio-answer-${i}" name='radio-answer' value='${i}' required><label class="answer" for="radio-answer-${i}"><span>${arr[i]}</span></label>
+                <input type='radio' id="radio-answer-${i}" name='radio-answer' value='${arr[i]}' required><label class="answer" for="radio-answer-${i}"><span>${arr[i]}</span></label>
             </div>
         `;
     }
@@ -60,7 +62,7 @@ function generateQuestionView() {
 function generateAnswerView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
-    const correctBool = isAnswerCorrect(questionData.correctAnswerIndex);
+    const correctBool = isAnswerCorrect(questionData.correctAnswer);
     return `
         <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
         <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
@@ -86,13 +88,13 @@ function generateFinalResultsView() {
 
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
-  return inputValue === STATE.answer
+    console.log(inputValue, STATE.answer);
+  return inputValue === STATE.answer;
 }
 
 // get input value from user
 function grabAnswer(form) {
     let inputValue = $(form).find('input[type=radio]:checked').val();
-    inputValue = parseInt(inputValue);
     STATE.answer = inputValue;
 }
 
@@ -103,7 +105,7 @@ function loadNewQuestion() {
 
 // check if user answer is the current correct answer
 function userScore() {
-    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
+    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswer) ? STATE.score++ : STATE.score;
 }
 
 // render and insert answer screen
@@ -125,12 +127,26 @@ function renderResultsView() {
 }
 
 // update score and total question count in header
+function initializeScore() {
+    $('.score-holder').animate({
+        opacity: 1,
+    }, '1000');
+}
+
+function renderUpdatedQuizTracker() {
+    renderUpdatedScore();
+    renderUpdatedQuestionNum();
+}
+
 function renderUpdatedScore() {
+    let score = STATE.score;
+    $('.score-tracker').text(`Score: ${score}`);
+}
+
+function renderUpdatedQuestionNum() {
     const currentQNum = STATE.currentQuestion+1;
     const totalQuestions = STATE.totalQuestions;
-    let score = STATE.score;
-    $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
-    $('.score-tracker').text(score);
+    $('.q-num-tracker').text(`Question: ${currentQNum+'/'+totalQuestions}`);
 }
 
 /* // get question img functions
@@ -153,16 +169,19 @@ function handleSubmitButton() {
     $('.container').on('submit', '.js-question-form', function (event) {
         event.preventDefault();
         grabAnswer(this);
-        renderAnswerView();
+        transitionToScreen(() => {
+            renderAnswerView();
+            fadeInContainer();
+        });
         userScore();
-        renderUpdatedScore();
+        renderUpdatedQuizTracker();
     });
 }
 
 // handle next question button
 function handleNextQuestionButton() {
     $('.container').on('click', '#js-next-question-btn', () => {
-        renderUpdatedScore();
+        renderUpdatedQuizTracker();
         if (STATE.totalQuestions - 1 > STATE.currentQuestion) {
             loadNewQuestion()
             renderQuestion();
@@ -179,31 +198,34 @@ function handlePlayAgainButton() {
         STATE.currentQuestion = 0;
         randomizeQuestionOrder();
         renderQuestion();
-        renderUpdatedScore();
+        renderUpdatedQuizTracker();
     });
 }
 
 // handles start quiz button on landing page
 function handleStartQuizButton() {
     $('#js-start-btn').click(() => {
-        transitionToQuestionScreen(() => {
+        transitionToScreen(() => {
             randomizeQuestionOrder();
             renderQuestion();
-            renderUpdatedScore();
+            renderUpdatedQuizTracker();
+            //animations
             fadeInContainer();
+            initializeScore();
+            moveStarsUp();
             fadeAndMoveInClouds();
         });
     });
 }
 
 //Animation functions
-function transitionToQuestionScreen(fn) {
-    $('.container').fadeOut('500');
+function transitionToScreen(fn) {
+    $('.container').fadeOut('1000');
     $('.container').promise().done(fn);
 }
 
 function fadeInContainer() {
-    $('.container').fadeIn('500');
+    $('.container').fadeIn('1000');
     
 }
 
@@ -211,14 +233,14 @@ function fadeAndMoveInClouds() {
     $('.background-image-details.clouds').animate({
         bottom: '0px',
         opacity: '1',
-    }, '1000');
+    }, '2000');
 }
 
-
-//Start Screen
-
-//Start Button -> Transitions us to the Quiz Screen
-
+function moveStarsUp() {
+    $('.background-image-details.stars').animate({
+        top: '-=400px',
+    }, '2000');
+}
 
 function main() {
     handleStartQuizButton();

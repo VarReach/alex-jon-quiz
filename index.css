@@ -3,6 +3,8 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+/* full-screen defaults */
+
 html, body {
   height: 100%;
 }
@@ -21,6 +23,16 @@ header {
   height: 12%;
 }
 
+.score-holder {
+  display: flex;
+  position: absolute;
+  top: 20px;
+  right: 50px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   position: relative;
   display: inline-block;
@@ -32,9 +44,8 @@ header {
 
 .background-image-details {
   float: left;
-  position: absolute;
+  position: fixed;
   z-index: -1;
-  max-width: 100%;
 }
 
 .stars {
@@ -45,24 +56,28 @@ header {
 
 .clouds {
   left: 0;
-  bottom: -500;
+  bottom: -200px;
 }
 
 .hidden {
   opacity: 0;
 }
 
-/* mobile defaults */
-
 .button-holder {
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  margin: 0 auto;
-  bottom: 100px;
+  margin: 50px auto 0;
+  height: 45px;
 }
 
 button {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+
   background-color: #7aa53d;
   color: white;
   font-weight: 600;
@@ -80,6 +95,15 @@ button {
 button:hover {
   height: 43px;
   border-bottom: 3px solid #23621e;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  height: 40px;
+  border-bottom: none;
 }
 
 /* welcome page */
@@ -100,9 +124,8 @@ p.welcome-subtitle {
 }
 
 h2 {
-  margin: 0;
-  bottom: 30px;
   position: relative;
+  bottom: 5px;
   font-size: 32pt;
   color: #12c8f6;
 }
@@ -153,8 +176,8 @@ form.js-question-form div.input-group {
 
 .input-group label {
     background-size: 200% 100%;
+    background-color: white;
     background-image: linear-gradient(to right, white 50%,#7aa53d 50%);
-    border-left: 5px solid white;
     padding: 12px 30px;
     width: 100%;
     border-radius: 5px;
@@ -166,21 +189,21 @@ form.js-question-form div.input-group {
     z-index: 2;
     transition: color 200ms ease-in;
     overflow: hidden;
-    transition: border-left 0.3s, background-position 1s, color 1s;
+    transition: background-position 0.5s, color 0.5s;
 }
 
 .input-group input[type=radio] {
-  all:unset;
+  all: unset;
 }
 
 .input-group label:hover {
-  border-left: 5px solid #7aa53d;
+  background-position: 5px 0;
 }
 
 .input-group input[type=radio]:checked ~ label {
+  background-color: #7aa53d;
   background-position: -100% 0;
   color: white;
-  border-left: 5px solid #7aa53d;
 }
 
 /* Below than 1500 width */
@@ -210,11 +233,32 @@ form.js-question-form div.input-group {
     padding: 30px;
   }
 
-  .answer {
+  .input-group {
     width: 90%;
     min-width: 0;
     min-height: 46px;
     height: auto;
     margin: 5px 0;
+  }
+
+  body, html {
+    height: auto;
+    overflow: auto;
+  }
+
+  h2 {
+    margin: 22px 0;
+  }
+
+  .clouds {
+    left: 0;
+    bottom: 0;
+  }
+}
+
+@media only screen and (max-height: 1000px) {
+  body, html {
+    height: auto;
+    overflow: auto;
   }
 }

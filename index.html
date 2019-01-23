@@ -11,17 +11,26 @@
 </head>
 <body>
   <header role="banner">
-    <img src="Images/Logo.png" alt="Logo, planet with moon and rings">
+    <nav role="navigation">
+      <img src="Images/Logo.png" alt="Planet Logo. Link to home page.">
+    </nav>
   </header>
-  <div class="flex-container container">
+  <aside role="complementary" class="score-holder hidden">
+    <span class="q-num-tracker">Question:</span>
+    <img src="Images/Separator.png" alt="Diagonal white separator">
+    <span class="score-tracker">Score:</span>
+  </aside>
+  <main class="flex-container container" role="main">
     <h1 class="welcome-title">Think you know about Sci-Fi television?</h1>
     <p class="welcome-subtitle">Find out with our 10 question quiz!</p>
     <div class="button-holder">
       <button id="js-start-btn">Let's Go!</button>
     </div>
+  </main>
+  <div>
+    <img class="background-image-details stars" src="Images/Stars.png" alt="A collection of minimalist stars placed on the background">
+    <img class="background-image-details clouds hidden" src="Images/Clouds.png" alt="Minimalist clouds aligned on the bottom of the screen in the background">
   </div>
-  <img class="background-image-details stars" src="Images/Stars.png" alt="A collection of minimalist stars placed on the background">
-  <img class="background-image-details clouds hidden" src="Images/Clouds.png" alt="Minimalist clouds aligned on the bottom of the screen in the background">
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
   <script src="data.js"></script>
