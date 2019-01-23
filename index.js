@@ -23,6 +23,19 @@ function shuffleArray(arr) {
     return arr;
 }
 
+//generate Welcome Page
+function generateLandingView() {
+    return `
+        <h1 class="welcome-title">Think you know about Sci-Fi television?</h1>
+        <p class="welcome-subtitle">Find out with our 10 question quiz!</p>
+        <div class="button-holder">
+        <button id="js-start-btn">Let's Go!</button>
+        </div>
+    `;
+}
+
+
+
 // generate question views
 function generateQuestionString(arr) {
     let fullString = '';
@@ -36,7 +49,6 @@ function generateQuestionString(arr) {
     }
     return fullString;
 }
-
 
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
@@ -140,6 +152,12 @@ function userScore() {
     correct ? STATE.score++ : STATE.score;
 }
 
+//render and insert landing screen
+function renderLandingView() {
+    const landingScreen = generateLandingView();
+    $('.container').html(landingScreen);
+}
+
 // render and insert answer screen
 function renderAnswerView() {
     const answerScreen = generateAnswerView();
@@ -224,9 +242,9 @@ function handlePlayAgainButton() {
     $('.container').on('click', '#js-play-again-btn', () => {
         STATE.score = 0;
         STATE.currentQuestion = 0;
-        // randomizeQuestionOrder();
-        // renderQuestion();
-        // renderUpdatedQuizTracker();
+        transitionToScreen(() => {
+            renderLandingView();
+        });
         hardResetBackgroundState();
         transitionBackground();
     });
@@ -234,7 +252,7 @@ function handlePlayAgainButton() {
 
 // handles start quiz button on landing page
 function handleStartQuizButton() {
-    $('#js-start-btn').click(() => {
+    $('.container').on('click', '#js-start-btn', () => {
         transitionToScreen(() => {
             randomizeQuestionOrder();
             renderQuestion();
@@ -260,20 +278,21 @@ function hardResetBackgroundState() {
 function transitionBackground() {
     const currentState = STATE.backgroundState;
     const mountainsHeight = BACKGROUND_STORE.mountains.height[currentState];
-    const mountainsOpacity = BACKGROUND_STORE.mountains.opacity[currentState]
+    const mountainsOpacity = BACKGROUND_STORE.mountains.opacity[currentState];
     const starsHeight = BACKGROUND_STORE.stars.height[currentState];
     const starsOpacity = BACKGROUND_STORE.stars.opacity[currentState];
     const length = BACKGROUND_STORE.length[currentState];
     //animate mountains
+
     const mountainsDone = $('.background-image-details.mountains').animate({
         bottom: `${mountainsHeight}`,
         opacity: `${mountainsOpacity}`,
-    }, `${length}`).promise();
+    }, length).promise();
     //animate stars
     const starsDone = $('.background-image-details.stars').animate({
-        bottom: `${starsHeight}`,
+        top: `${starsHeight}`,
         opacity: `${starsOpacity}`,
-    }, `${length}`).promise();
+    }, length).promise();
     Promise.all([starsDone,mountainsDone]).then(() => {
         fadeInContainer();
     });
@@ -319,6 +338,7 @@ function initializeScore() {
 }
 
 function main() {
+    renderLandingView()
     handleStartQuizButton();
     handleSubmitButton();
     handleNextQuestionButton();
