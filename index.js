@@ -63,11 +63,6 @@ function generateAnswerView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
     const correctBool = isAnswerCorrect(questionData.correctAnswerIndex);
-    const chosenAnswer = STATE.answer;
-    console.log(chosenAnswer)
-    console.log(questionData)
-    console.log(questionData.correctAnswerIndex)
-    console.log(correctBool);
     return `
         <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
         <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
@@ -120,18 +115,26 @@ function renderAnswerView() {
     $('.container').html(answerScreen);
 }
 
+
 // handle submit button
 function handleSubmitButton() {
     $('.container').on('submit', '.js-question-form', function(event) {
         event.preventDefault();
         grabAnswer(this);
         renderAnswerView();
+        userScore();
         renderUpdatedScore();
     });
 }
 
 // handle next question button
-
+function handleNextQuestionButton() {
+  $('.container').on('click', '#js-next-question-btn', () => {
+    loadNewQuestion();
+    renderQuestion();
+    renderUpdatedScore();
+  });
+}
 
 // handle restart button
 
@@ -144,10 +147,14 @@ function renderQuestion() {
     $('.container').html(questionScreen);
 }
 
+function userScore() {
+    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
+}
+
 function renderUpdatedScore() {
     const currentQNum = STATE.currentQuestion;
     const totalQuestions = STATE.totalQuestions;
-    const score = STATE.score;
+    let score = STATE.score;
     $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
     $('.score-tracker').text(score);
 }
@@ -177,6 +184,7 @@ function handleStartQuizButton() {
 function main() {
     handleStartQuizButton();
     handleSubmitButton();
+    handleNextQuestionButton();
 }
 
 $(main);
