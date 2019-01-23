@@ -261,11 +261,21 @@ function animateQuestionNum(fn) {
     });
 }
 
+
+function dropDownMenu() {
+    $('.dropdown').click('.dropdown-content', () => {
+        let input = $('.dropdown-item:hover').text();
+        input = parseInt(input)
+        STATE.totalQuestions = input;
+    });
+}
+
 function main() {
     handleStartQuizButton();
     handleSubmitButton();
     handleNextQuestionButton();
     handlePlayAgainButton();
+    dropDownMenu();
 }
 
 $(main);
