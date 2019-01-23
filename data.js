@@ -1,5 +1,11 @@
 'use strict';
 
+const BACKGROUND_STORE = {
+    mountains: { height: ['-700px', '-539px', '0'], opacity: [0, 1, 1] },
+    stars: { height: ['50%', 'calc(50%+400px)', 'calc(50%+800px)'], opacity: [1, 1, 0] },
+    length: ['1000', '2000', '5000'],
+}
+
 const STORE = [
     //ST:TOS
     {

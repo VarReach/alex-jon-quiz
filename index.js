@@ -5,6 +5,7 @@ const STATE = {
     score: 0,
     totalQuestions: 1,
     answer: 0,
+    backgroundState: 0,
     questions: [],
 };
 
@@ -76,15 +77,44 @@ function generateAnswerView() {
 }
 
 // generate final results view
+function getPerformanceString(s,tq) {
+    const percentRight = Math.floor(s/tq*100);
+    if (percentRight === 100) {
+        return 'Amazing! You\'re a master at this!';
+    } else if (percentRight < 100 && percentRight >= 80) {
+        return 'Wow. You\'re pretty good at this!'; 
+    } else if (percentRight < 80 && percentRight >= 60) {
+        return 'Great! You\'re getting the hang of this.';
+    } else if (percentRight < 60 && percentRight >= 40) {
+        return 'Not bad. Mabye you should watch some more Sci-Fi though.';
+    } else {
+        return 'You might be terrible at this. Go watch some TV!';
+    }
+}
+
+function getMedalAttrs(s,tq) {
+    const percentRight = Math.floor(s/tq*100);
+    if (percentRight >= 80) {
+        return { src: 'Images/GoldMedal.png', alt: 'A gold medal' };
+    } else if ( percentRight >= 60 ) {
+        return { src: 'Images/SilverMedal.png', alt: 'A silver medal' };
+    } else {
+        return { src: 'Images/BronzeMedal.png', alt: 'A bronze medal' };
+    }
+}
+
 function generateFinalResultsView() {
     let score = STATE.score;
     const totalQuestions = STATE.totalQuestions;
+    const performanceString = getPerformanceString(score,totalQuestions);
+    const medalAttr = getMedalAttrs(score,totalQuestions);
     return `
-        <h2>Congratulations</h2>
-        <img>
-        <h3>Your score ${score} / ${totalQuestions}</h3>
-        <p>You're ${score >= 8 ? 'a grandmaster' : score === 5 || 6 || 7 ? 'average' : 'possibly terrible'}  at identifying Tv Shows!</p>
-        <button id="js-play-again-btn">Play again?</button>
+        <img class="medal" src="${medalAttr.src}" alt="${medalAttr.alt}">
+        <h3>Your score: ${score} / ${totalQuestions}</h3>
+        <p class="results-subtitle">${performanceString}</p>
+        <div class="button-holder">
+            <button id="js-play-again-btn">Play again?</button>
+        </div>
   `;
 }
 
@@ -129,12 +159,6 @@ function renderResultsView() {
 }
 
 // update score and total question count in header
-function initializeScore() {
-    $('.score-holder').animate({
-        opacity: 1,
-    }, '1000');
-}
-
 function renderUpdatedQuizTracker() {
     renderUpdatedScore();
     renderUpdatedQuestionNum();
@@ -176,7 +200,6 @@ function handleSubmitButton() {
 // handle next question button
 function handleNextQuestionButton() {
     $('.container').on('click', '#js-next-question-btn', () => {
-        console.log(STATE.totalQuestions, STATE.currentQuestion);
         if (STATE.totalQuestions - 1 > STATE.currentQuestion) {
             loadNewQuestion();
 
@@ -186,7 +209,12 @@ function handleNextQuestionButton() {
                 fadeInContainer();
             });
         } else {
-            renderResultsView();
+            transitionToScreen(() => {
+                fadeOutScore()
+                renderResultsView();
+                incrementBackgroundState();
+                transitionBackground();
+            });
         }
     });
 }
@@ -196,9 +224,11 @@ function handlePlayAgainButton() {
     $('.container').on('click', '#js-play-again-btn', () => {
         STATE.score = 0;
         STATE.currentQuestion = 0;
-        randomizeQuestionOrder();
-        renderQuestion();
-        renderUpdatedQuizTracker();
+        // randomizeQuestionOrder();
+        // renderQuestion();
+        // renderUpdatedQuizTracker();
+        hardResetBackgroundState();
+        transitionBackground();
     });
 }
 
@@ -210,15 +240,45 @@ function handleStartQuizButton() {
             renderQuestion();
             renderUpdatedQuizTracker();
             //animations
-            fadeInContainer();
             initializeScore();
-            moveStarsUp();
-            fadeAndMoveInClouds();
+            incrementBackgroundState();
+            transitionBackground();
         });
     });
 }
 
 //Animation functions
+function incrementBackgroundState() {
+    STATE.backgroundState < 3 ? STATE.backgroundState++ : STATE.backgroundState = 0;
+}
+
+//called when pressing logo at top
+function hardResetBackgroundState() {
+    STATE.backgroundState = 0;
+}
+
+function transitionBackground() {
+    const currentState = STATE.backgroundState;
+    const mountainsHeight = BACKGROUND_STORE.mountains.height[currentState];
+    const mountainsOpacity = BACKGROUND_STORE.mountains.opacity[currentState]
+    const starsHeight = BACKGROUND_STORE.stars.height[currentState];
+    const starsOpacity = BACKGROUND_STORE.stars.opacity[currentState];
+    const length = BACKGROUND_STORE.length[currentState];
+    //animate mountains
+    const mountainsDone = $('.background-image-details.mountains').animate({
+        bottom: `${mountainsHeight}`,
+        opacity: `${mountainsOpacity}`,
+    }, `${length}`).promise();
+    //animate stars
+    const starsDone = $('.background-image-details.stars').animate({
+        bottom: `${starsHeight}`,
+        opacity: `${starsOpacity}`,
+    }, `${length}`).promise();
+    Promise.all([starsDone,mountainsDone]).then(() => {
+        fadeInContainer();
+    });
+}
+
 function transitionToScreen(fn) {
     $('.container').fadeOut('1000');
     $('.container').promise().done(fn);
@@ -227,19 +287,6 @@ function transitionToScreen(fn) {
 function fadeInContainer() {
     $('.container').fadeIn('1000');
     
-}
-
-function fadeAndMoveInClouds() {
-    $('.background-image-details.clouds').animate({
-        bottom: '0px',
-        opacity: '1',
-    }, '2000');
-}
-
-function moveStarsUp() {
-    $('.background-image-details.stars').animate({
-        top: '-=400px',
-    }, '2000');
 }
 
 function animateScore(fn) {
@@ -259,6 +306,16 @@ function animateQuestionNum(fn) {
             $('.q-num-tracker').slideDown('500');
         });
     });
+}
+
+function fadeOutScore() {
+    $('.tracker-holder').fadeOut('1000');
+}
+
+function initializeScore() {
+    $('.tracker-holder').animate({
+        opacity: 1,
+    }, '1000');
 }
 
 function main() {
