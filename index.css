@@ -11,7 +11,7 @@ body {
   text-align: center;
   background: #020a23 url('./Images/BGPattern.png') repeat right top;
   margin: 0;
-  overflow: auto;
+  overflow: hidden;
 }
 
 header {
@@ -45,11 +45,11 @@ header {
 
 .clouds {
   left: 0;
-  bottom: 0;
+  bottom: -500;
 }
 
 .hidden {
-  visibility: hidden;
+  opacity: 0;
 }
 
 /* mobile defaults */
@@ -137,23 +137,27 @@ form.js-question-form div.input-group {
 }
 
 .answer span {
+  position: relative;
+  right: 2px;
   display: inline-block;
   position: relative;
   font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
 }
 
 .input-group {
-  background-color: #fff;
-  border-left: 5px solid white;
   display: inline-block;
   margin: 10px 0;
   position: relative;
-  border-radius: 5px;
 }
 
 .input-group label {
+    background-size: 200% 100%;
+    background-image: linear-gradient(to right, white 50%,#7aa53d 50%);
+    border-left: 5px solid white;
     padding: 12px 30px;
     width: 100%;
+    border-radius: 5px;
     display: block;
     text-align: left;
     color: #3C454C;
@@ -162,32 +166,22 @@ form.js-question-form div.input-group {
     z-index: 2;
     transition: color 200ms ease-in;
     overflow: hidden;
+    transition: border-left 0.3s, background-position 1s, color 1s;
 }
 
 .input-group input[type=radio] {
   all:unset;
 }
 
-@keyframes buttonHover {
-  from {border-left: 5px solid white;}
-  to {border-left: 5px solid #7aa53d;}
-}
-
-.input-group:hover {
+.input-group label:hover {
   border-left: 5px solid #7aa53d;
-  animation-name: buttonHover;
-  animation-duration: 0.3s;
 }
 
-.checkbox {
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 0;
-  background-color:blue;
+.input-group input[type=radio]:checked ~ label {
+  background-position: -100% 0;
+  color: white;
+  border-left: 5px solid #7aa53d;
 }
-
- 
 
 /* Below than 1500 width */
 

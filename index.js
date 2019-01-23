@@ -28,12 +28,13 @@ function generateQuestionString(arr) {
     for (let i = 0; i < arr.length; i++) {
         fullString += `
             <div class="input-group">
-                <label class="answer"><input type='radio' name='radio-answer' value='${i}' required><span>${arr[i]}</span></label>
+                <input type='radio' id="radio-answer-${i}" name='radio-answer' value='${i}' required><label class="answer" for="radio-answer-${i}"><span>${arr[i]}</span></label>
             </div>
         `;
     }
     return fullString;
 }
+
 
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
@@ -185,10 +186,32 @@ function handlePlayAgainButton() {
 // handles start quiz button on landing page
 function handleStartQuizButton() {
     $('#js-start-btn').click(() => {
-        randomizeQuestionOrder();
-        renderQuestion();
-        renderUpdatedScore();
+        transitionToQuestionScreen(() => {
+            randomizeQuestionOrder();
+            renderQuestion();
+            renderUpdatedScore();
+            fadeInContainer();
+            fadeAndMoveInClouds();
+        });
     });
+}
+
+//Animation functions
+function transitionToQuestionScreen(fn) {
+    $('.container').fadeOut('500');
+    $('.container').promise().done(fn);
+}
+
+function fadeInContainer() {
+    $('.container').fadeIn('500');
+    
+}
+
+function fadeAndMoveInClouds() {
+    $('.background-image-details.clouds').animate({
+        bottom: '0px',
+        opacity: '1',
+    }, '1000');
 }
 
 
