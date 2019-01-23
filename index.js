@@ -27,8 +27,6 @@ function shuffleArray(arr) {
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
-    console.log(STATE.questions)
-    console.log(STATE.questions[currentQuestion])
     return `
         <h2>Some text</h2>
         <img src=${questionData.image.src} alt=${questionData.image.alt}>
@@ -61,8 +59,7 @@ function generateAnswerView() {
 // generate final results view
 function generateFinalResultsView() {
     let score = STATE.score;
-    const totalQuestions = STATE.totalQuestions
-    console.log(score)
+    const totalQuestions = STATE.totalQuestions;
     return `
         <h2>Congratulations</h2>
         <img>
@@ -97,13 +94,11 @@ function userScore() {
 // render and insert answer screen
 function renderAnswerView() {
     const answerScreen = generateAnswerView();
-    console.log(answerScreen);
     $('.container').html(answerScreen);
 }
 
 // render and insert question screen
 function renderQuestion() {
-    loadNewQuestion();
     const questionScreen = generateQuestionView();
     $('.container').html(questionScreen);
 }
@@ -116,7 +111,7 @@ function renderResultsView() {
 
 // update score and total question count in header
 function renderUpdatedScore() {
-    const currentQNum = STATE.currentQuestion;
+    const currentQNum = STATE.currentQuestion+1;
     const totalQuestions = STATE.totalQuestions;
     let score = STATE.score;
     $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
@@ -152,14 +147,14 @@ function handleSubmitButton() {
 // handle next question button
 function handleNextQuestionButton() {
     $('.container').on('click', '#js-next-question-btn', () => {
-        if (STATE.questions.length - 1 !== STATE.currentQuestion) {
+        console.log(STATE.totalQuestions, STATE.currentQuestion);
+        renderUpdatedScore();
+        if (STATE.totalQuestions - 1 > STATE.currentQuestion) {
+            loadNewQuestion()
             renderQuestion();
-            renderUpdatedScore();
         } else {
-            renderUpdatedScore();
             renderResultsView();
         }
-
     });
 }
 
