@@ -3,7 +3,7 @@
 const STATE = {
     currentQuestion: 0,
     score: 0,
-    totalQuestions: 1,
+    totalQuestions: 10,
     answer: 0,
     backgroundState: 0,
     questions: [],
