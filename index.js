@@ -53,12 +53,12 @@ function generateAnswerView() {
         <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
         <h3 class='js-correct-asnwer'>The correct answer was...</h3>
         <p>${questionData.answers[questionData.correctAnswerIndex]}</p>
+        <p>${questionData.trivia}</p>
         <button id="js-next-question-btn">Next Question</button>
     `;
 }
 
 // generate final results view
-
 function generateFinalResultsView() {
     let score = STATE.score;
     const totalQuestions = STATE.totalQuestions
@@ -123,12 +123,12 @@ function renderUpdatedScore() {
     $('.score-tracker').text(score);
 }
 
-// get question img functions
+/* // get question img functions
 function getCurrentQuestion() {
     let currentQuestion = getRandomInt(STORE.length);
     console.log('getCurrentQuestion function called');
     return currentQuestion;
-}
+} */
 
 // get random number array that is the total amount of questions desired
 function randomizeQuestionOrder() {
