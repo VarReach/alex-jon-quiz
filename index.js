@@ -8,11 +8,7 @@ const STATE = {
     questions: [],
 };
 
-// get random integer
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-
+// generate random questions order
 function shuffleArray(arr) {
     let i = 0;
     let j = 0;
@@ -31,6 +27,8 @@ function shuffleArray(arr) {
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
+    console.log(STATE.questions)
+    console.log(STATE.questions[currentQuestion])
     return `
         <h2>Some text</h2>
         <img src=${questionData.image.src} alt=${questionData.image.alt}>
@@ -45,108 +43,94 @@ function generateQuestionView() {
      `;
 }
 
-// generate landing view
-function generateLandingView() {
-    return `
-    <section class="hidden">
-      <h2>Think you know Sci-Fi television?</h2>
-      <p>Find out with our 10 question quiz!</p>
-      <button id="js-start-btn">Let's Go!</button>
-    </section>
-  `;
-}
-
-
-
 // generate answers view
 function generateAnswerView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
     const correctBool = isAnswerCorrect(questionData.correctAnswerIndex);
-    console.log(correctBool);
     return `
         <img src=${questionData.altImage.src} alt=${questionData.altImage.alt}>
         <h2>${correctBool ? 'You were right!' : 'Wrong!'}</h2>
         <h3 class='js-correct-asnwer'>The correct answer was...</h3>
-        <p>Answer goes here</p>
+        <p>${questionData.answers[questionData.correctAnswerIndex]}</p>
+        <p>${questionData.trivia}</p>
         <button id="js-next-question-btn">Next Question</button>
     `;
 }
 
 // generate final results view
 function generateFinalResultsView() {
+    let score = STATE.score;
+    const totalQuestions = STATE.totalQuestions
+    console.log(score)
     return `
-  <section class="hidden">
-    <h2>Congratulations</h2>
-    <img>
-    <h3>Your score 8/10</h3>
-    <p>You're a grandmaster at identifying Tv Shows!</p>
-    <button id="js-play-again-btn">Play again?</button>
-  </section>
+        <h2>Congratulations</h2>
+        <img>
+        <h3>Your score ${score} / ${totalQuestions}</h3>
+        <p>You're ${score >= 8 ? 'a grandmaster' : score === 5 || 6 || 7 ? 'average' : 'possibly terrible'}  at identifying Tv Shows!</p>
+        <button id="js-play-again-btn">Play again?</button>
   `;
 }
 
-// get question img functions
-function getCurrentQuestion() {
-    let currentQuestion = getRandomInt(STORE.length);
-    console.log('getCurrentQuestion function called');
-    return currentQuestion;
-}
-
-// get question answer functions
-
-
-// handle let's go button
-
-
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
-    return inputValue === STATE.answer;
+  return inputValue === STATE.answer
 }
 
+// get input value from user
 function grabAnswer(form) {
-    const inputValue = $(form).find('input[type=radio]:checked').val();
+    let inputValue = $(form).find('input[type=radio]:checked').val();
+    inputValue = parseInt(inputValue);
     STATE.answer = inputValue;
 }
 
+// keep track of current question
+function loadNewQuestion() { 
+    STATE.currentQuestion++;
+}
+
+// check if user answer is the current correct answer
+function userScore() {
+    isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
+}
+
+// render and insert answer screen
 function renderAnswerView() {
     const answerScreen = generateAnswerView();
     console.log(answerScreen);
     $('.container').html(answerScreen);
 }
 
-// handle submit button
-function handleSubmitButton() {
-    $('.container').on('submit', '.js-question-form', function(event) {
-        event.preventDefault();
-        grabAnswer(this);
-        renderAnswerView();
-        renderUpdatedScore();
-    });
-}
-
-// handle next question button
-
-
-// handle restart button
-
-function loadNewQuestion() { 
-    STATE.currentQuestion++;
-}
-
+// render and insert question screen
 function renderQuestion() {
+    loadNewQuestion();
     const questionScreen = generateQuestionView();
     $('.container').html(questionScreen);
 }
 
+// render and insert results screen
+function renderResultsView() {
+    const resultsScreen = generateFinalResultsView();
+    $('.container').html(resultsScreen);
+}
+
+// update score and total question count in header
 function renderUpdatedScore() {
     const currentQNum = STATE.currentQuestion;
     const totalQuestions = STATE.totalQuestions;
-    const score = STATE.score;
+    let score = STATE.score;
     $('.q-num-tracker').text(currentQNum+'/'+totalQuestions);
     $('.score-tracker').text(score);
 }
 
+/* // get question img functions
+function getCurrentQuestion() {
+    let currentQuestion = getRandomInt(STORE.length);
+    console.log('getCurrentQuestion function called');
+    return currentQuestion;
+} */
+
+// get random number array that is the total amount of questions desired
 function randomizeQuestionOrder() {
     const randoOrderArr = shuffleArray(STORE);
     const totalQuestions = STATE.totalQuestions;
@@ -154,7 +138,43 @@ function randomizeQuestionOrder() {
     STATE.questions = actualQuestions;
 }
 
+// handle submit button
+function handleSubmitButton() {
+    $('.container').on('submit', '.js-question-form', function (event) {
+        event.preventDefault();
+        grabAnswer(this);
+        renderAnswerView();
+        userScore();
+        renderUpdatedScore();
+    });
+}
 
+// handle next question button
+function handleNextQuestionButton() {
+    $('.container').on('click', '#js-next-question-btn', () => {
+        if (STATE.questions.length - 1 !== STATE.currentQuestion) {
+            renderQuestion();
+            renderUpdatedScore();
+        } else {
+            renderUpdatedScore();
+            renderResultsView();
+        }
+
+    });
+}
+
+// handle play again button
+function handlePlayAgainButton() {
+    $('.container').on('click', '#js-play-again-btn', () => {
+        STATE.score = 0;
+        STATE.currentQuestion = 0;
+        randomizeQuestionOrder();
+        renderQuestion();
+        renderUpdatedScore();
+    });
+}
+
+// handles start quiz button on landing page
 function handleStartQuizButton() {
     $('#js-start-btn').click(() => {
         randomizeQuestionOrder();
@@ -172,6 +192,8 @@ function handleStartQuizButton() {
 function main() {
     handleStartQuizButton();
     handleSubmitButton();
+    handleNextQuestionButton();
+    handlePlayAgainButton();
 }
 
 $(main);
