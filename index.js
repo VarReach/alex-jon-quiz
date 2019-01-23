@@ -31,6 +31,8 @@ function shuffleArray(arr) {
 function generateQuestionView() {
     const currentQuestion = STATE.currentQuestion;
     const questionData = STATE.questions[currentQuestion];
+    console.log(STATE.questions)
+    console.log(STATE.questions[currentQuestion])
     return `
         <h2>Some text</h2>
         <img src=${questionData.image.src} alt=${questionData.image.alt}>
@@ -73,15 +75,17 @@ function generateAnswerView() {
 }
 
 // generate final results view
+
 function generateFinalResultsView() {
+    let score = STATE.score;
+    const totalQuestions = STATE.totalQuestions
+    console.log(score)
     return `
-  <section class="hidden">
-    <h2>Congratulations</h2>
-    <img>
-    <h3>Your score 8/10</h3>
-    <p>You're a grandmaster at identifying Tv Shows!</p>
-    <button id="js-play-again-btn">Play again?</button>
-  </section>
+        <h2>Congratulations</h2>
+        <img>
+        <h3>Your score ${score} / ${totalQuestions}</h3>
+        <p>You're ${score >= 8 ? 'a grandmaster' : score === 5 || 6 || 7 ? 'average' : 'possibly terrible'}  at identifying Tv Shows!</p>
+        <button id="js-play-again-btn">Play again?</button>
   `;
 }
 
@@ -92,11 +96,17 @@ function getCurrentQuestion() {
     return currentQuestion;
 }
 
-// get question answer functions
 
-
-// handle let's go button
-
+// handle play again button
+function handlePlayAgainButton() {
+    $('.container').on('click', '#js-play-again-btn', () => {
+        STATE.score = 0;
+        STATE.currentQuestion = 0;
+        randomizeQuestionOrder();
+        renderQuestion();
+        renderUpdatedScore();
+    });
+}
 
 // decide if answer is correct
 function isAnswerCorrect(inputValue) {
@@ -130,9 +140,14 @@ function handleSubmitButton() {
 // handle next question button
 function handleNextQuestionButton() {
   $('.container').on('click', '#js-next-question-btn', () => {
-    loadNewQuestion();
-    renderQuestion();
-    renderUpdatedScore();
+    if (STATE.questions.length-1 !== STATE.currentQuestion) {
+        renderQuestion();
+        renderUpdatedScore();
+    } else {
+        renderUpdatedScore();
+        renderResultsView();
+    }
+    
   });
 }
 
@@ -143,12 +158,18 @@ function loadNewQuestion() {
 }
 
 function renderQuestion() {
+    loadNewQuestion();
     const questionScreen = generateQuestionView();
     $('.container').html(questionScreen);
 }
 
 function userScore() {
     isAnswerCorrect(STATE.questions[STATE.currentQuestion].correctAnswerIndex) ? STATE.score++ : STATE.score;
+}
+
+function renderResultsView() {
+    const resultsScreen = generateFinalResultsView();
+    $('.container').html(resultsScreen);
 }
 
 function renderUpdatedScore() {
@@ -185,6 +206,7 @@ function main() {
     handleStartQuizButton();
     handleSubmitButton();
     handleNextQuestionButton();
+    handlePlayAgainButton();
 }
 
 $(main);
